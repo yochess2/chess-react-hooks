@@ -1,25 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import { Outlet } from "react-router-dom"
+
+import NavBar from "./NavBar"
+import SideBar from "./SideBar"
+import SearchBar from "./SearchBar"
+
+const styles = {
+    border: {
+        border: "solid",
+    }
+}
+
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <div className="container">
+            <div className="row" style={styles.border}>
+                <NavBar />
+            </div>
+            <div className="row">
+                <div className="col-lg-3" style={styles.border}>
+                    <SideBar />
+                </div>
+                <div className="col-lg-9" style={styles.border}>
+                    <Outlet />
+                    <SearchBar />
+                </div>
+            </div>
+        </div>
+    );
 }
 
 export default App;
