@@ -1,7 +1,7 @@
 import React from 'react'
 // import PropTypes from 'prop-types'
 
-const GameComponent = props => {
+const GamesComponent = props => {
 	return (
 		<h2>
 			Game
@@ -13,4 +13,4 @@ const GameComponent = props => {
 
 // }
 
-export default GameComponent
+export default GamesComponent

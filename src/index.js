@@ -1,13 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+
 import "bootstrap/dist/js/bootstrap"
 import "bootstrap/dist/css/bootstrap.css"
 import './index.css';
 
 import App from './App';
-import BoardComponent from "./BoardComponent";
-import GameComponent from "./GameComponent";
-import TwitchComponent from "./TwitchComponent";
+import BoardComponent from "./board-component/BoardComponent";
+import GamesComponent from "./games-component/GamesComponent";
+import TwitchComponent from "./twitch-component/TwitchComponent";
 
 
 import {
@@ -21,8 +22,8 @@ const router = createBrowserRouter([
         element: <App />,
         children: [
         {
-            path: "game",
-            element: <GameComponent />,
+            path: "games",
+            element: <GamesComponent />,
         },
         {
             path: "board",
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
         {
             path: "twitch",
             element: <TwitchComponent />,
+        },
+        {
+            path: "*",
+            element: <h1>Not Found</h1>
         },]
     },
 ]);
