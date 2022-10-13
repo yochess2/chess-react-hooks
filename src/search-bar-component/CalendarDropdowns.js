@@ -2,22 +2,24 @@ import React, { useState, useContext } from 'react'
 import PropTypes from 'prop-types'
 
 import CalendarDropdown from "./CalendarDropdown"
-import { ErrorContext } from "../ErrorComponent.js"
+import { SetErrorContext } from "../ErrorComponent.js"
 
 const CalendarDropdowns = ({startDate, endDate, setStartDate, setEndDate}) => {
-	const [open, setOpen] = useState(false)
-	const errorContext = useContext(ErrorContext)
+	const [open, setOpen] = useState({
+		open: false
+	})
+	const setErrorContext = useContext(SetErrorContext)
 
 	return (
 		<div className="input-group">
-			<CalendarDropdown date={startDate} onChange={handleStartDate} open={false}/>
-			<CalendarDropdown date={endDate} onChange={handleEndDate} open={open}/>
+			<CalendarDropdown date={startDate} onChange={handleStartDate} />
+			<CalendarDropdown date={endDate} onChange={handleEndDate} toggle={open}/>
 		</div>
 	)
-
+ 
 	function handleStartDate(date, event) {
 		if (date > new Date()) {
-			errorContext.setError({
+			setErrorContext({
 				value: true,
 				type: "searchbar",
 				message: "Start date cannot be set to the future!"
@@ -25,13 +27,13 @@ const CalendarDropdowns = ({startDate, endDate, setStartDate, setEndDate}) => {
 			return false
 		}
 		setStartDate(date)
-		setOpen(true)
+		setOpen({open: true})
 		return true
 	}
 
 	function handleEndDate(date, event) {
 		if (date < startDate) {
-			errorContext.setError({
+			setErrorContext({
 				value: true,
 				type: "searchbar",
 				message: "End date cannot be before start date!"
@@ -39,7 +41,7 @@ const CalendarDropdowns = ({startDate, endDate, setStartDate, setEndDate}) => {
 			return false
 		}
 		setEndDate(date)
-		setOpen(false)
+		setOpen({open: false})
 		return true
 	}
 }

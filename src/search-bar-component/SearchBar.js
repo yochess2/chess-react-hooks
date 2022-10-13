@@ -1,12 +1,12 @@
 import React, { useState, useContext } from 'react'
 
 import CalendarDropdowns from "./CalendarDropdowns"
-import { ErrorContext } from "../ErrorComponent.js"
+import { SetErrorContext } from "../ErrorComponent.js"
 
 import PropTypes from 'prop-types'
 
-const SearchBar = ({ handleSubmit }) => {
-	const errorContext = useContext(ErrorContext)
+const SearchBar = ({ setInputs }) => {
+	const setErrorContext = useContext(SetErrorContext)
 
 	const [startDate, setStartDate] = useState(new Date())
 	const [endDate, setEndDate] = useState(new Date())
@@ -29,12 +29,12 @@ const SearchBar = ({ handleSubmit }) => {
 						className="form-control"
 						value={username}
 						onChange={e => setUsername(e.target.value)}
-						onKeyPress={e => { if (e.key === "Enter") onSubmit() }} 
+						onKeyPress={e => { if (e.key === "Enter") handleSubmit() }} 
 						aria-label="Search Username"/>
 					<button
 						id="usersearch01" 
 						className="btn btn-primary btn-outline" 
-						onClick={onSubmit}>
+						onClick={handleSubmit}>
 						Search
 					</button>
 				</div>
@@ -42,9 +42,9 @@ const SearchBar = ({ handleSubmit }) => {
 		</div>
 	)
 
-	function onSubmit() {
+	function handleSubmit() {
 		if (username.length === 0) {
-			errorContext.setError({
+			setErrorContext({
 				value: true,
 				type: "searchbar",
 				message: "Input should not be blank",
@@ -52,22 +52,22 @@ const SearchBar = ({ handleSubmit }) => {
 			return false
 		}
 		if (!endDate || !startDate || (endDate < startDate)) {
-			errorContext.setError({
+			setErrorContext({
 				value: true,
 				type: "searchbar",
 				message: "Dates are invalid",
 			})
 			return false
 		}
-		errorContext.setError({ value: false, type: "searchbar", message: "" })
-		handleSubmit(username, startDate, endDate)
+		setErrorContext({ value: false, type: "searchbar", message: "" })
+		setInputs({username, startDate, endDate})
 		setUsername("")
 		return true
 	}
 }
 
 SearchBar.propTypes = {
-	handleSubmit: PropTypes.func,
+	setInputs: PropTypes.func,
 } 
 
-export default React.memo(SearchBar)
+export default SearchBar

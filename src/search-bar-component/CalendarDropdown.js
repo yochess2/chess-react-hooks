@@ -14,24 +14,15 @@ const styles = {
 	}
 }
 
-const CalendarDropdown = ({date, onChange, open }) => {
+const CalendarDropdown = ({date, onChange, toggle }) => {
 	const elemRef = useRef(null)
-	const monthYear = dateHelper.dateToMonthYear(date, open)
+	const monthYear = dateHelper.dateToMonthYear(date)
 
 	useEffect(() => {
-		let thisEl = elemRef.current
-		if (open) {
-			thisEl?.click()
-		} 
-		return () => {
-			if (isOpen()) { 
-				thisEl?.click()
-			}
+		if (toggle?.open) {
+			elemRef.current?.click()			
 		}
-		function isOpen() {
-			return elemRef.current?.ariaExpanded === "true"
-		}
-	}, [open])
+	}, [toggle])
 
 	return (
 		<div className="dropdown" style={styles.dropdownButtonWrapper}>
@@ -66,7 +57,7 @@ const CalendarDropdown = ({date, onChange, open }) => {
 CalendarDropdown.propTypes = {
 	date: PropTypes.instanceOf(Date),
 	onChange: PropTypes.func,
-	open: PropTypes.bool,
+	toggle: PropTypes.object,
 }
 
 export default CalendarDropdown
