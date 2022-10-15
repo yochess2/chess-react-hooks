@@ -10,6 +10,8 @@ import BoardComponent from "./board-component/BoardComponent";
 import GamesComponent from "./games-component/GamesComponent";
 import TwitchComponent from "./twitch-component/TwitchComponent";
 
+// import {loader as playerLoader } from "./player-component/PlayerProfile"
+
 
 import {
     createBrowserRouter,
@@ -20,10 +22,15 @@ const router = createBrowserRouter([
     {
         path: "/",
         element: <App />,
+        // loader: playerLoader,
         children: [
         {
             path: "games",
             element: <GamesComponent />,
+        },
+        {
+            path: "games/:username/:startdate/:enddate",
+            element: <div>Hello</div>
         },
         {
             path: "board",

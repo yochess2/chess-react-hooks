@@ -6,16 +6,15 @@ const ErrorComponent = ({error}) => {
     const setErrorContext = useContext(SetErrorContext)
 
     return (
-        <div className="alert alert-danger alert-dismissible fade show mb-0 mt-sm-2" role="alert">
-            <strong>Holy guacamole!</strong> {error.message}.
+        <div className="alert alert-danger alert-dismissible fade show mb-0 mt-2" role="alert">
+            <strong>Error!</strong>{" "}{error.message}.
             <button 
                 type="button" 
                 className="btn-close" 
                 data-bs-dismiss="alert" 
                 aria-label="Close" 
-                onClick={() => { setErrorContext({
-                    value: false, message: ""
-                })}}/>
+                onClick={() => setErrorContext({ value: false, type: "", message: "" })}
+            />
         </div>
     )
 }

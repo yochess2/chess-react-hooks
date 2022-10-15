@@ -67,7 +67,7 @@ const SearchBar = ({ setInputs }) => {
 }
 
 SearchBar.propTypes = {
-	setInputs: PropTypes.func,
+	setInputs: PropTypes.func, 
 } 
 
 export default SearchBar

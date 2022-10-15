@@ -6,11 +6,7 @@ import { FaCaretDown, FaCaretUp } from "react-icons/fa"
 
 // import PropTypes from 'prop-types'
 
-
-
-
-
-const SideBar = props => {
+const SideBar = ({children, username, startDate, endDate}) => {
 	const sidebarName = useSidebarName()
 	const [toggle, setToggle] = useState(true)
 
@@ -51,7 +47,7 @@ const SideBar = props => {
 						</div>
 					</NavLink>
 				</div>
-				{props.children}
+				{children}
 			</div>
 		</>
 	)
@@ -63,7 +59,12 @@ function Arrow({toggle}) {
 
 function useSidebarName() {
 	const link = useLocation()
-	const name = link.pathname.charAt(1).toUpperCase() + link.pathname.slice(2,link.pathname.length)
+
+	let name 
+	if (link.pathname.slice(1,6) === "games") {
+		return "Games"
+	}
+	name = link.pathname.charAt(1).toUpperCase() + link.pathname.slice(2,link.pathname.length)
 	return name || "Sidebar"
 }
 

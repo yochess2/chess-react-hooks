@@ -13,7 +13,7 @@ const CalendarDropdowns = ({startDate, endDate, setStartDate, setEndDate}) => {
 	return (
 		<div className="input-group">
 			<CalendarDropdown date={startDate} onChange={handleStartDate} />
-			<CalendarDropdown date={endDate} onChange={handleEndDate} toggle={open}/>
+			<CalendarDropdown date={endDate} onChange={handleEndDate} toggle={open} />
 		</div>
 	)
  
@@ -26,6 +26,7 @@ const CalendarDropdowns = ({startDate, endDate, setStartDate, setEndDate}) => {
 			})
 			return false
 		}
+		setErrorContext({value: false, type: "", message: ""})
 		setStartDate(date)
 		setOpen({open: true})
 		return true
@@ -40,6 +41,7 @@ const CalendarDropdowns = ({startDate, endDate, setStartDate, setEndDate}) => {
 			})
 			return false
 		}
+		setErrorContext({value: false, type: "", message: ""})
 		setEndDate(date)
 		setOpen({open: false})
 		return true
