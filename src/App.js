@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useMemo } from "react"
 import { Outlet } from "react-router-dom"
 
 import useMediaQuery from "./utilities/useMediaQuery"
@@ -23,8 +23,9 @@ function App() {
     const [error, setError] = useState({value: false,type: "searchbar",message: ""})
     const [username, setUsername] = useState(null)
 
-
-    const api = new ChessWebApi()
+    const api = useMemo(() => {
+        return new ChessWebApi({queue:true})
+    }, [])
 
     const [player, setPlayer] = useState({
         username: null,
@@ -92,7 +93,7 @@ function App() {
 
                         <QueryClientProvider client={queryClient}>
                             <SetErrorContext.Provider value={setError}>
-                                {/*{ isLarge && <PlayerSide player={player} /> }*/}
+                                { isLarge && <PlayerSide player={player} /> }
                             </SetErrorContext.Provider>
                         </QueryClientProvider>
 
