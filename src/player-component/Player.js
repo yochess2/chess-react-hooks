@@ -1,53 +1,65 @@
 import React, { useContext } from 'react'
-// import { useParams } from "react-router-dom"
-import ChessWebApi from "chess-web-api"
-import PulseLoader from "react-spinners/PulseLoader"
+import { useParams, useOutletContext } from "react-router-dom"
 
 import { usePlayerInfo, usePlayerStats } from "./usePlayer"
 import { SetErrorContext } from "../ErrorComponent.js"
 
 import { dateHelper, isJsonString } from "../utilities/utils"
 
-const PlayerProfile = ({username, startDate, endDate, setPlayer}) => {
-	// const params = useParams()
 
+const Player = () => {
+	const [setPlayer, api] = useOutletContext()
+	const params = useParams()
+	const username = params.username
 	const setErrorContext = useContext(SetErrorContext)
-	const api = new ChessWebApi()
 
-	const { data, isFetching } = usePlayerInfo(username, api, handlePlayerError, handleSuccess)
+	const { data } = usePlayerInfo(username, api, handlePlayerError, handleSuccess)
 	const playerInfo = data?.body
-
-	const { data: data2 } = usePlayerStats(username, playerInfo, api)
+	const { data: data2 } = usePlayerStats(username, playerInfo, api, handleSuccess2)
 	const playerStats = data2?.body
 
-	if (isFetching) {
-		return <><h4>Fetching...</h4><PulseLoader /></>
-	}
-
 	return (
-		<>{playerInfo && 
-		<div className="card text-center mt-sm-2" style={{maxWidth: "574px"}}>
-			<div className="d-none d-lg-block">
-	    		<PlayerUsername playerInfo={playerInfo} />
+		<>
+		{playerInfo && 
+		<div className="card text-center mx-auto mt-sm-2" style={{maxWidth: "100%"}}>
+			<div className="card-header">
+				<PlayerUsername playerInfo={playerInfo} />
 			</div>
-			<div className="row">
-				{ playerInfo.avatar && <PlayerImage playerInfo={playerInfo} /> }
-				<div className="col-12 col-sm-6 col-lg-12">
-					<div className="card-body">
-						<div className="d-lg-none ms-2">
-			    			<PlayerUsername playerInfo={playerInfo} />
-			    		</div>
-						<ul className="list-group">
-							{ playerInfo && <PlayerName playerInfo={playerInfo} /> }
-							<PlayerDates playerInfo={playerInfo} />
-			    		    { playerStats && <PlayerStats playerStats={playerStats} /> }
-		    		    </ul>
-				  	</div>
+			<div className="row card-body">
+				<div className="col-6">
+					<PlayerImage playerInfo={playerInfo} />
+				</div>
+				<div className="col-6">
+					<ul className="list-group">
+						{ playerInfo && <PlayerName playerInfo={playerInfo} /> }
+						<PlayerDates playerInfo={playerInfo} />
+		    		    { playerStats && <PlayerStats playerStats={playerStats} /> }
+	    		    </ul>
 				</div>
 			</div>
 		</div>
 		}</>
 	)
+
+		// function getStarttDate(startDate, joinedDate) {
+		// 	if (!joinedDate) return extractDate(startDate).monthYear 
+
+		// 	if (startDate < fixChessDate(joinedDate)) {
+		// 		return extractDate(fixChessDate(joinedDate)).monthYear
+		// 	} else {
+		// 		return extractDate(startDate).monthYear
+		// 	}
+		// }
+
+		// function getEndDate() {
+		// 	const today = new Date()
+		// 	if (endDate > today) {
+		// 		return extractDate(today).monthYear
+		// 	} else {
+		// 		return extractDate(endDate).monthYear
+		// 	}
+		// }
+
 	function handlePlayerError(error) {
 		setErrorContext({
 			value: true,
@@ -57,32 +69,31 @@ const PlayerProfile = ({username, startDate, endDate, setPlayer}) => {
 	}
 
 	function handleSuccess(response) {
-		console.log('>>>> invoked')
 		const { fixChessDate, extractDate } = dateHelper
-		setPlayer(prevState => ({
+		setPlayer(prevPlayer =>({
 			username: response.body.username,
-			startDate: getStarttDate(startDate, response.body.joined),
-			endDate: getEndDate(endDate),
+			name: response.body.name,
+			avatar: response.body.avatar,
+			joined: response.body.joined,
+			startDate: extractDate(fixChessDate(response.body.joined)).monthYear,
+			last: response.body.last_online,
+			lastOnline: extractDate(fixChessDate(response.body.last_online)).monthYear,
+			title: response.body.title,
 		}))
+	}
 
-		function getStarttDate(startDate, joinedDate) {
-			if (!joinedDate) return extractDate(startDate).monthYear 
-
-			if (startDate < fixChessDate(joinedDate)) {
-				return extractDate(fixChessDate(joinedDate)).monthYear
-			} else {
-				return extractDate(startDate).monthYear
-			}
-		}
-
-		function getEndDate() {
-			const today = new Date()
-			if (endDate > today) {
-				return extractDate(today).monthYear
-			} else {
-				return extractDate(endDate).monthYear
-			}
-		}
+	function handleSuccess2(response) {
+		setPlayer(prevPlayer => ({
+			...prevPlayer,
+			fide: response.body.fide,
+			blitz: response.body.chess_blitz,
+			bullet: response.body.chess_bullet,
+			daily: response.body.chess_daily,
+			rapid: response.body.chess_rapid,
+			lessons: response.body.lessons,
+			puzzle_rush: response.body.puzzle_rush,
+			tactics: response.body.tactics,
+		}))
 	}
 }
 
@@ -92,11 +103,7 @@ function PlayerUsername({playerInfo}) {
 
 function PlayerImage({playerInfo}) {
 	return (
-		<div className="col-12 col-sm-6 col-lg-12 d-none d-sm-block">
-			<div className="card-header">
-				<img src={playerInfo.avatar} className="card-img-top" alt="Logo" />
-			</div>
-		</div>
+		<img src={playerInfo.avatar} className="card-img-top" alt="Logo" style={{width: "auto"}}/>
 	)
 }
 
@@ -131,7 +138,7 @@ function PlayerStats({playerStats}) {
 	)
 }
 
-export default React.memo(PlayerProfile)
+export default React.memo(Player)
 
 // export async function loader({params}) {
 // 	const api = new ChessWebApi()

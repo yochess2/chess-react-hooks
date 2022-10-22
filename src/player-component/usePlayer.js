@@ -16,6 +16,9 @@ export function usePlayerStats(username, playerInfo, api, handleSuccess) {
 	return useQuery(
 		['playerId', playerInfo?.player_id], 
 		() => api.getPlayerStats(username), 
-		{ enabled: !!playerInfo }
+		{ 
+			enabled: !!playerInfo ,
+			onSuccess: handleSuccess,
+		}
 	)
 }

@@ -14,18 +14,17 @@ const styles = {
 	}
 }
 
-const CalendarDropdown = ({date, onChange, toggle, setOpen }) => {
+const CalendarDropdown = ({date, onChange, toggle }) => {
 	const elemRef = useRef(null)
 	const monthYear = dateHelper.dateToMonthYear(date)
 
 	useEffect(() => {
+		let isClose = false
 		if (toggle?.open) {
-			elemRef.current?.click()
+			if (!isClose) elemRef.current?.click();
 		}
-		return () => {
-			// console.log('use react bootstrap or figure out how to cleanup!')
-		}
-	}, [toggle])
+		return () => isClose = true;
+	}, [toggle]) 
 
 	return (
 		<div className="dropdown" style={styles.dropdownButtonWrapper}>

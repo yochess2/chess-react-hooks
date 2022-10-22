@@ -9,6 +9,8 @@ import App from './App';
 import BoardComponent from "./board-component/BoardComponent";
 import GamesComponent from "./games-component/GamesComponent";
 import TwitchComponent from "./twitch-component/TwitchComponent";
+import PlayerComponent from "./player-component/PlayerComponent";
+import Player from "./player-component/Player";
 
 // import {loader as playerLoader } from "./player-component/PlayerProfile"
 
@@ -41,6 +43,14 @@ const router = createBrowserRouter([
             element: <TwitchComponent />,
         },
         {
+            path: "player",
+            element: <PlayerComponent />,
+        },
+        {
+            path: "player/:username",
+            element: <Player />,
+        },
+        {
             path: "*",
             element: <h1>Not Found</h1>
         },]
@@ -49,7 +59,7 @@ const router = createBrowserRouter([
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <React.StrictMode>
+    <>
         <RouterProvider router={router} />
-    </React.StrictMode>
+    </>
 );

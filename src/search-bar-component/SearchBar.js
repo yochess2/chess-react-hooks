@@ -1,27 +1,30 @@
 import React, { useState, useContext } from 'react'
+import { useNavigate } from "react-router-dom"
 
-import CalendarDropdowns from "./CalendarDropdowns"
+// import CalendarDropdowns from "./CalendarDropdowns"
 import { SetErrorContext } from "../ErrorComponent.js"
 
 import PropTypes from 'prop-types'
 
-const SearchBar = ({ setInputs }) => {
+const SearchBar = ({ setParentUsername }) => {
+	const navigate = useNavigate()
 	const setErrorContext = useContext(SetErrorContext)
 
-	const [startDate, setStartDate] = useState(new Date())
-	const [endDate, setEndDate] = useState(new Date())
+	// const [startDate, setStartDate] = useState(new Date())
+	// const [endDate, setEndDate] = useState(new Date())
 	const [username, setUsername] = useState("")
 
-	return (
-		<div className="row mt-sm-2">
-			<div className="col-12 col-md-6">
+	return (<>
+		{/*<div className="row mt-sm-2">*/}
+			{/*<div className="col-12 col-md-6">
 				<CalendarDropdowns
 					startDate={startDate} 
 					setStartDate={setStartDate} 
 					endDate={endDate}
 					setEndDate={setEndDate}/>
-			</div>
-			<div className="col-12 col-md-6">
+			</div>*/}
+			{/*<div className="col-12 col-md-6">*/}
+			<div className="d-flex">
 				<div className="input-group search-inputs">
 					<input 
 						type="search"
@@ -38,9 +41,10 @@ const SearchBar = ({ setInputs }) => {
 						Search
 					</button>
 				</div>
-			</div>	
-		</div>
-	)
+			</div>
+			{/*</div>	*/}
+		{/*</div>*/}
+</>)
 
 	function handleSubmit() {
 		if (username.length === 0) {
@@ -51,16 +55,18 @@ const SearchBar = ({ setInputs }) => {
 			})
 			return false
 		}
-		if (!endDate || !startDate || (endDate < startDate)) {
-			setErrorContext({
-				value: true,
-				type: "searchbar",
-				message: "Dates are invalid",
-			})
-			return false
-		}
+		// if (!endDate || !startDate || (endDate < startDate)) {
+		// 	setErrorContext({
+		// 		value: true,
+		// 		type: "searchbar",
+		// 		message: "Dates are invalid",
+		// 	})
+		// 	return false
+		// }
 		setErrorContext({ value: false, type: "searchbar", message: "" })
-		setInputs({username, startDate, endDate})
+		// setInputs({username, startDate, endDate})
+		setParentUsername(username)
+		navigate(`player/${username}`)
 		setUsername("")
 		return true
 	}
@@ -70,4 +76,4 @@ SearchBar.propTypes = {
 	setInputs: PropTypes.func, 
 } 
 
-export default SearchBar
+export default React.memo(SearchBar)

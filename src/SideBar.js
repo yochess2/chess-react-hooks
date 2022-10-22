@@ -6,10 +6,9 @@ import { FaCaretDown, FaCaretUp } from "react-icons/fa"
 
 // import PropTypes from 'prop-types'
 
-const SideBar = ({children, username, startDate, endDate}) => {
+const SideBar = ({children, username}) => {
 	const sidebarName = useSidebarName()
 	const [toggle, setToggle] = useState(true)
-
 	return (
 		<>
 			<div className="sidebar-heading text-center">
@@ -28,6 +27,19 @@ const SideBar = ({children, username, startDate, endDate}) => {
 			</div>
 			<div className="sidebar-body show" id="side-menu">
 				<div className="list-group">
+
+					{children &&
+					<li className="list-group-item p-0">
+						{children}
+					</li>
+					}
+
+					<NavLink className="list-group-item" to={getLink(username)}>
+						<div className="ms-2 me-auto">
+							<div className="fw-bold">Player</div>
+							{username || "No Player"}
+						</div>
+					</NavLink>
 					<NavLink className="list-group-item" to="games">
 						<div className="ms-2 me-auto">
 							<div className="fw-bold">Games</div>
@@ -46,30 +58,41 @@ const SideBar = ({children, username, startDate, endDate}) => {
 							paragraphs
 						</div>
 					</NavLink>
+
 				</div>
-				{children}
 			</div>
 		</>
 	)
-}
-
-function Arrow({toggle}) {
-	return toggle ? <FaCaretUp /> : <FaCaretDown />
-}
-
-function useSidebarName() {
-	const link = useLocation()
-
-	let name 
-	if (link.pathname.slice(1,6) === "games") {
-		return "Games"
+	function getLink(username) {
+		if (username) {
+			return `player/${username}`
+		} else {
+			return "player"
+		}
 	}
-	name = link.pathname.charAt(1).toUpperCase() + link.pathname.slice(2,link.pathname.length)
-	return name || "Sidebar"
+
+	function Arrow({toggle}) {
+		return toggle ? <FaCaretUp /> : <FaCaretDown />
+	}
+
+	function useSidebarName() {
+		const link = useLocation()
+
+		let name 
+		if (link.pathname.slice(1,6) === "games") {
+			return "Games"
+		}
+		if (link.pathname.slice(1,7) === "player") {
+			return "Player"
+		}
+		name = link.pathname.charAt(1).toUpperCase() + link.pathname.slice(2,link.pathname.length)
+		return name || "Sidebar"
+	}
 }
+
 
 // SideBar.propTypes = {
 
 // }
 
-export default SideBar
+export default React.memo(SideBar)

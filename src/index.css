@@ -26,3 +26,7 @@ code {
 .list-group-item.active {
     background-color: #2a67ad;
 }
+
+.list-group-item .btn {
+    background-color: #2a67ad;
+}
